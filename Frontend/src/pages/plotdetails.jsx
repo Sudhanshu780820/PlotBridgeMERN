@@ -64,7 +64,7 @@ const PlotDetails = () => {
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&q=80";
     if (imagePath.startsWith('http')) return imagePath;
-    return `http://localhost:5000${imagePath}`;
+    return `${imagePath}`;
   };
 
   if (loading) {

@@ -11,7 +11,7 @@ export default function PlotsPage() {
   useEffect(() => {
     const fetchPlots = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/plots');
+        const response = await fetch('/api/plots');
         const result = await response.json();
         
         if (result.success) {

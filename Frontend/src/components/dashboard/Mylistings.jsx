@@ -19,7 +19,7 @@ export default function MyListings() {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/api/plots/my-listings', {
+        const response = await fetch('/api/plots/my-listings', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -52,7 +52,7 @@ export default function MyListings() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/plots/${plotId}`, {
+      const response = await fetch(`/api/plots/${plotId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

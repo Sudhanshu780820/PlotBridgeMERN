@@ -81,7 +81,7 @@ const handlePublish = async (e) => {
 
     try {
       // 3. Send the request WITH the Authorization header
-      const response = await fetch('http://localhost:5000/api/plots', {
+      const response = await fetch('/api/plots', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}` 

@@ -18,7 +18,7 @@ export default function SellerDashboardStats() {
       if (!token) return; // Handle not logged in
 
       try {
-        const response = await fetch('http://localhost:5000/api/plots/dashboard-stats', {
+        const response = await fetch('/api/plots/dashboard-stats', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}` // Provide the token to unlock the route
