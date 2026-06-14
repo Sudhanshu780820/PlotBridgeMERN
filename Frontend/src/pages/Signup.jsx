@@ -71,7 +71,7 @@ const Signup = () => {
       }
 
       // 2. Make the request (Make sure this URL matches your backend EXACTLY)
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
+      const response = await fetch("api/auth/signup", {
         method: "POST",
         body: dataToSend,
         // DO NOT set "Content-Type" manually when sending FormData
