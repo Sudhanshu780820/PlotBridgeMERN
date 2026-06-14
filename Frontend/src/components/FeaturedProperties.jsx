@@ -9,7 +9,7 @@ export default function FeaturedPlots() { // Removed the unused 'plot' parameter
     const fetchPlots = async () => {
       try {
         // FIXED: Use the dynamic Vite environment variable for Vercel deployment
-        const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const API_BASE_URL = import.meta.env.VITE_API_URL ;
         
         const response = await fetch(`${API_BASE_URL}/api/plots`);
         const result = await response.json();

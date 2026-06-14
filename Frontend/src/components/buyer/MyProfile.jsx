@@ -10,7 +10,7 @@ export default function UserProfile() {
     phone: '',
     userType: '',
     profilePhotoPath: '', 
-    identityCardPath: '', // Added to store document path
+    identityCardPath: '', 
   });
 
   // Load user data from local storage when the component mounts
@@ -24,7 +24,7 @@ export default function UserProfile() {
         phone: user.phone || '',
         userType: user.userType || '',
         profilePhotoPath: user.profilePhoto || '',
-        identityCardPath: user.identityCard || '', // Load the document path
+        identityCardPath: user.identityCard || '', 
       });
     }
   }, []);
@@ -33,12 +33,6 @@ export default function UserProfile() {
   const getInitials = (name) => {
     if (!name) return 'U';
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-  };
-
-  // Helper to safely format image/document paths for the backend
-  const formatPath = (path) => {
-    if (!path) return '';
-    return `http://localhost:5000/${path.substring(path.indexOf('uploads/')).replace(/\\/g, '/')}`;
   };
 
   return (
@@ -78,7 +72,7 @@ export default function UserProfile() {
                 <div className="w-32 h-32 rounded-full ring-4 ring-blue-50 bg-slate-100 overflow-hidden mb-4 flex items-center justify-center border border-slate-200">
                   {formData.profilePhotoPath ? (
                     <img 
-                      src={formatPath(formData.profilePhotoPath)} 
+                      src={formData.profilePhotoPath} // FIXED: Using Cloudinary URL directly
                       className="w-full h-full object-cover" 
                       alt="Profile" 
                     />
@@ -119,7 +113,6 @@ export default function UserProfile() {
                 <h3 className="font-bold text-slate-800">Personal Details</h3>
               </div>
 
-              {/* Notice this is no longer a <form> tag */}
               <div className="p-6 space-y-6">
                 
                 {/* Row 1: Full Name & Email Address */}
@@ -159,7 +152,6 @@ export default function UserProfile() {
 
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-bold uppercase tracking-wider text-slate-500">User Type</label>
-                    {/* Replaced <select> with a text input since it's read-only */}
                     <input
                       type="text"
                       value={formData.userType}
@@ -176,13 +168,11 @@ export default function UserProfile() {
                   {formData.identityCardPath ? (
                     <div className="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50 max-w-sm">
                       <div className="flex items-center gap-3">
-                        {/* Small Document Thumbnail Box */}
                         <div className="w-12 h-12 bg-white rounded-lg border border-slate-200 flex items-center justify-center overflow-hidden shrink-0">
-                          {/* If it's a PDF, we show a document icon. If image, we show a tiny preview */}
                           {formData.identityCardPath.toLowerCase().endsWith('.pdf') ? (
                             <span className="text-xl">📄</span>
                           ) : (
-                            <img src={formatPath(formData.identityCardPath)} alt="Document thumbnail" className="w-full h-full object-cover opacity-80" />
+                            <img src={formData.identityCardPath} alt="Document thumbnail" className="w-full h-full object-cover opacity-80" /> // FIXED: Using Cloudinary URL directly
                           )}
                         </div>
                         <div>
@@ -191,9 +181,8 @@ export default function UserProfile() {
                         </div>
                       </div>
                       
-                      {/* View Button */}
                       <a 
-                        href={formatPath(formData.identityCardPath)} 
+                        href={formData.identityCardPath} // FIXED: Using Cloudinary URL directly
                         target="_blank" 
                         rel="noreferrer"
                         className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-blue-600 hover:bg-slate-50 transition-colors"
