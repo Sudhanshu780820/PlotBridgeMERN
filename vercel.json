@@ -6,7 +6,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "frontend/package.json",
+      "src": "Frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
         "distDir": "dist"
@@ -16,11 +16,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/backend/app.js"
+      "destination": "/Backend/app.js"
     },
     {
       "source": "/(.*)",
-      "destination": "/frontend/index.html" 
+      "destination": "/Brontend/index.html" 
     }
   ]
 }
