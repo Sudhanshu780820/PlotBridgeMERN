@@ -65,12 +65,16 @@ router.get('/dashboard-stats', authMiddleware, async (req, res) => {
 // GET route to fetch all plots
 router.get('/', async (req, res) => {
   try {
-    // Find all plots and sort them by newest first
-    const plots = await Plot.find().sort({ createdAt: -1 }); 
+    const plots = await Plot.find().sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: plots });
   } catch (error) {
-    console.error("Error fetching plots:", error);
-    res.status(500).json({ success: false, message: 'Server Error' });
+    console.error("FULL ERROR:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      stack: error.stack
+    });
   }
 });
 router.get('/:id', async (req, res) => {
