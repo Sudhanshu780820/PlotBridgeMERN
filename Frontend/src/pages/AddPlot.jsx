@@ -55,54 +55,73 @@ const handleFileChange = (e) => {
     setSelectedFiles(e.target.files); // <-- Store the files in state
   }
 };
+const uploadToCloudinary = async (file) => {
+  const formData = new FormData();
+
+  formData.append("file", file);
+  formData.append("upload_preset", "plotbridge_upload");
+
+  const response = await fetch(
+    "https://api.cloudinary.com/v1_1/di8kzu2yp/image/upload",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  const data = await response.json();
+
+  if (!data.secure_url) {
+    throw new Error("Cloudinary upload failed");
+  }
+
+  return data.secure_url;
+};
 
 const handlePublish = async (e) => {
-    e.preventDefault();
-    
-    // 1. Grab the token from storage! Make sure the user is actually logged in.
-    const token = localStorage.getItem('token');
+  e.preventDefault();
+
+  try {
+    const token = localStorage.getItem("token");
+
     if (!token) {
-      alert("You must be logged in to publish a listing.");
+      alert("Login required");
       return;
     }
 
-    // 2. Create the FormData object (THIS IS WHAT WAS MISSING!)
-    const submitData = new FormData();
-    
+    // Upload images directly to Cloudinary
+    const imageUrls = [];
 
-    Object.keys(formData).forEach(key => {
-      submitData.append(key, formData[key]);
+    for (const file of selectedFiles) {
+      const url = await uploadToCloudinary(file);
+      imageUrls.push(url);
+    }
+
+    // Send ONLY URLs to backend
+    const response = await fetch("/api/plots", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        ...formData,
+        images: imageUrls,
+      }),
     });
-    // 1. APPEND FILES FIRST
-    for (let i = 0; i < selectedFiles.length; i++) {
-      submitData.append('images', selectedFiles[i]);
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert("Property listed successfully");
+    } else {
+      alert(result.message);
     }
-    
-
-    try {
-      // 3. Send the request WITH the Authorization header
-      const response = await fetch('/api/plots', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}` 
-          // Note: Do NOT set 'Content-Type', the browser sets it for FormData automatically
-        },
-        body: submitData // This will now work because submitData is defined above!
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        alert(`Listing Published Successfully!\nCoordinates Saved: ${formData.lat}, ${formData.lng}`);
-        // Optional: Redirect user or clear form here
-      } else {
-        alert(`Error: ${result.message}`);
-      }
-    } catch (error) {
-      console.error("Fetch error:", error);
-      alert("Could not connect to the server.");
-    }
-  };
+  } catch (error) {
+    console.error(error);
+    alert("Failed to publish property");
+  }
+};
   return (
     <>
       <Navbar />

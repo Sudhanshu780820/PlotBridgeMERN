@@ -12,7 +12,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const { createPlot } = require('../controllers/storeController');
 
-router.post('/',authMiddleware, upload.array('images', 5), createPlot);
+router.post( '/', authMiddleware,createPlot );
 
 
 
