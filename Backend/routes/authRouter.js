@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { signupUser,loginUser } = require("../controllers/authController");
 
-// Import your existing multer setup
-// e.g., const upload = require("../middleware/uploadMiddleware"); 
+
 const upload = require("../config/multer"); 
 
 // Define the POST route

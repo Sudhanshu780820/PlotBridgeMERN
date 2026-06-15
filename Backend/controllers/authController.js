@@ -26,6 +26,12 @@ const uploadBufferToCloudinary = (buffer, folderName) => {
 const signupUser = async (req, res) => {
   try {
     const { fullName, email, phone, userType, password } = req.body;
+    console.log("BODY:", req.body);
+console.log("FILES:", req.files);
+
+console.log("CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME);
+console.log("CLOUDINARY_API_KEY:", process.env.CLOUDINARY_API_KEY ? "SET" : "MISSING");
+console.log("CLOUDINARY_API_SECRET:", process.env.CLOUDINARY_API_SECRET ? "SET" : "MISSING");
 
     // 1. Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -45,11 +51,13 @@ const signupUser = async (req, res) => {
     // Note: We use .buffer instead of .filename now
     if (req.files?.["profilePhoto"]) {
         profilePhotoUrl = await uploadBufferToCloudinary(req.files["profilePhoto"][0].buffer, "PlotBridge/Profiles");
+        console.log("Uploading profile photo...");
     }
 
     // Check and upload Identity Card
     if (req.files?.["identityCard"]) {
         identityCardUrl = await uploadBufferToCloudinary(req.files["identityCard"][0].buffer, "PlotBridge/IDCards");
+        console.log("Uploading identity card...");
     } else {
       return res.status(400).json({ message: "Identity Card is required for verification." });
     }
@@ -89,10 +97,14 @@ const signupUser = async (req, res) => {
         identityCard: newUser.identityCard
       }
     });
-  } catch (error) {
-    console.error("Signup Controller Error:", error);
-    res.status(500).json({ message: "Server error during signup." });
-  }
+  }catch (error) {
+  console.error("Signup Controller Error:", error);
+
+  res.status(500).json({
+    message: error.message,
+    stack: error.stack
+  });
+}
 };
 
 const loginUser = async (req, res) => {
