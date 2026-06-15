@@ -97,7 +97,7 @@ export default function EditProperty() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/plots/${id}`, {
+      const response = await fetch(/api/plots/${id}, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
